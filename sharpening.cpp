@@ -19,7 +19,7 @@ int kernel_size = 28;
 
 int main()
 {
-	// ¿øº» »çÁø °æ·Î
+	// ì›ë³¸ ì‚¬ì§„ ê²½ë¡œ
 	const char* file_path = "../card_img/*.jpg";
 
 	vector<String> filename;
@@ -38,7 +38,7 @@ int main()
 
 		//resize(frame, frame, Size(garo, sero));
 
-		//imshow("ÇöÀç ¿øº»¿µ»ó", frame);
+		//imshow("í˜„ì¬ ì›ë³¸ì˜ìƒ", frame);
 		//waitKey(0);
 		//destroyAllWindows();
 		last_result = frame.clone();
@@ -51,7 +51,7 @@ int main()
 
 		Mat roi;
 
-		// resize ÈÄ ¿øº»¿µ»óÀ» º¹»ç
+		// resize í›„ ì›ë³¸ì˜ìƒì„ ë³µì‚¬
 		cvtColor(matInput, matInput, COLOR_RGB2GRAY);
 		bilateralFilter(matInput, matResult, 5, 75, 75);
 		//GaussianBlur(matInput, matResult, Size(11,11), 0);
@@ -67,21 +67,21 @@ int main()
 		//Mat Dilate_Kernel = getStructuringElement(MORPH_RECT, Size(25, 5));
 		Mat Dilate_Kernel = getStructuringElement(MORPH_RECT, Size(kernel_size, 5));
 
-		// ¸ğÆú·ÎÁö¿¡ »ç¿ëÇÒ Ä¿³Î »ı¼º
+		// ëª¨í´ë¡œì§€ì— ì‚¬ìš©í•  ì»¤ë„ ìƒì„±
 		Mat dst1, dst2, dst3;
 		//morphologyEx(matInput, dst1, MORPH_DILATE, Kernel_15, Point(-1, -1), 2);
 		morphologyEx(matInput, dst2, MORPH_ERODE, Erode_Kernel, Point(-1, -1), 2);
 		morphologyEx(dst2, dst3, MORPH_DILATE, Dilate_Kernel, Point(-1, -1), 2);
 
-		//imshow("canny -> ÆØÃ¢¿¬»ê", dst1);
+		//imshow("canny -> íŒ½ì°½ì—°ì‚°", dst1);
 		//waitKey(0);
 		//destroyAllWindows();
 
-		//mshow("canny -> Ä§½Ä¿¬»ê", dst2);
+		//mshow("canny -> ì¹¨ì‹ì—°ì‚°", dst2);
 		//aitKey(0);
 		//estroyAllWindows();
 		//
-		//mshow("canny -> Ä§½Ä¿¬»ê ÈÄ ÆØÃ¢", dst3);
+		//mshow("canny -> ì¹¨ì‹ì—°ì‚° í›„ íŒ½ì°½", dst3);
 		//aitKey(0);
 		//estroyAllWindows();
 
@@ -94,25 +94,25 @@ int main()
 
 		vector<RotatedRect> minRect(contour.size());
 
-		// minAreaRect »ı¼º
+		// minAreaRect ìƒì„±
 		for (int i = 0; i < contour.size(); i++)
 		{
 			minRect[i] = minAreaRect(Mat(contour[i]));
 		}
 
-		// ÈÄº¸ 3°³ ÀúÀå¿ë ±¸Á¶Ã¼
+		// í›„ë³´ 3ê°œ ì €ì¥ìš© êµ¬ì¡°ì²´
 		typedef struct set
 		{
 			float area = 0;
 			int idx = 0;
 		}Set;
 
-		vector <Set> temp_set(3); // ÈÄº¸ 3°³
+		vector <Set> temp_set(3); // í›„ë³´ 3ê°œ
 
-		// minAreaRect ±×¸®´Â ºÎºĞ
+		// minAreaRect ê·¸ë¦¬ëŠ” ë¶€ë¶„
 		for (int i = 0; i < contour.size(); i++)
 		{
-			// center¿¡ »ç°¢ÇüÀÇ Áß½É(x,y)ÁÂÇ¥,  size¿¡ width, height, ±â¿ï¾îÁø °¢µµ¸¦ °¡Áö°íÀÖÀ½
+			// centerì— ì‚¬ê°í˜•ì˜ ì¤‘ì‹¬(x,y)ì¢Œí‘œ,  sizeì— width, height, ê¸°ìš¸ì–´ì§„ ê°ë„ë¥¼ ê°€ì§€ê³ ìˆìŒ
 			Point2f rect_points[4];
 			minRect[i].points(rect_points);
 
@@ -125,18 +125,18 @@ int main()
 
 			ratio = abs(ratio);
 
-			//ÀüÃ¼ ´Ù boxing
+			//ì „ì²´ ë‹¤ boxing
 			for (int j = 0; j < 4; j++)
 			{
 				line(last_result2, rect_points[j], rect_points[(j + 1) % 4], Scalar(255, 255, 0), 4, 8);
 			}
 
 
-			//°¡·Î, ¼¼·Î ±æÀÌ , Á¾È¾ºñ µîÀ¸·Î °Å¸£±â
+			//ê°€ë¡œ, ì„¸ë¡œ ê¸¸ì´ , ì¢…íš¡ë¹„ ë“±ìœ¼ë¡œ ê±°ë¥´ê¸°
 			if (((w <= restrict_w && ratio >= 4) || (h <= restrict_h && ratio >= 4)) || ((isnan(ratio) && w < restrict_nan) || (isnan(ratio) && h < restrict_nan)))
 			{
 				int k = 0;
-				//³ĞÀÌ ¼øÀ¸·Î »óÀ§ 3µî±îÁö¸¸ ÀúÀå
+				//ë„“ì´ ìˆœìœ¼ë¡œ ìƒìœ„ 3ë“±ê¹Œì§€ë§Œ ì €ì¥
 				if (temp_set[2].area < minRect[i].size.area())
 				{
 					if (temp_set[1].area < minRect[i].size.area())
@@ -165,7 +165,7 @@ int main()
 					}
 
 				}
-				/*Á¶°Ç ¹Ú½º
+				/*ì¡°ê±´ ë°•ìŠ¤
 				for (int j = 0; j < 4; j++)
 				{
 				   line(k_15, rect_points[j], rect_points[(j + 1) % 4], Scalar(0, 0, 255), 4, 8);
@@ -174,14 +174,14 @@ int main()
 			}
 
 
-			//ÀüÃ¼ Áß¿¡¼­ ¸Ç ¸¶Áö¸· ÄÁÅõ¾î ÀÏ¶§ 
+			//ì „ì²´ ì¤‘ì—ì„œ ë§¨ ë§ˆì§€ë§‰ ì»¨íˆ¬ì–´ ì¼ë•Œ 
 			if (i == contour.size() - 1)
 			{
-				for (int k = 0; k < 2; k++) // 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222¸¦ 3À¸·Î ¹Ù²ã¾ß ÈÄº¸ 3°³ Áö±İÀº 2·ÎÇÔ
+				for (int k = 0; k < 2; k++) // 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222ë¥¼ 3ìœ¼ë¡œ ë°”ê¿”ì•¼ í›„ë³´ 3ê°œ ì§€ê¸ˆì€ 2ë¡œí•¨
 				{
 
-					//cout << "ÀÎµ¦½º : " << temp_set[k].idx;
-					//cout << " ÀÇ ³ĞÀÌ : " << temp_set[k].area << endl;
+					//cout << "ì¸ë±ìŠ¤ : " << temp_set[k].idx;
+					//cout << " ì˜ ë„“ì´ : " << temp_set[k].area << endl;
 
 
 					minRect[temp_set[k].idx].points(rect_points);
@@ -195,7 +195,7 @@ int main()
 					{
 
 						line(k_15, rect_points[j], rect_points[(j + 1) % 4], Scalar(0, 0, 255), 4, 8);
-						//cout << "ÇöÀçÀÇ j : " << j << " rect_points[j] : " << rect_points[j] << endl;
+						//cout << "í˜„ì¬ì˜ j : " << j << " rect_points[j] : " << rect_points[j] << endl;
 
 						if (rect_points[left_idx2].x >= rect_points[j].x)
 						{
@@ -277,12 +277,12 @@ int main()
 
 
 					cvtColor(read_roi, read_roi, COLOR_RGB2GRAY);
-					//imshow("ÀúÀåµÈ roi", read_roi);
+					//imshow("ì €ì¥ëœ roi", read_roi);
 					//waitKey();
 
 					Mat canny, thre, rest, morph;
 
-					// È­Áú °³¼±µÈ grayscale ÀÌ¹ÌÁö°¡ filter¿¡ ÀúÀåµÊ
+					// í™”ì§ˆ ê°œì„ ëœ grayscale ì´ë¯¸ì§€ê°€ filterì— ì €ì¥ë¨
 					threshold(read_roi, thre, 0, 255, THRESH_BINARY | THRESH_OTSU);
 					imshow("thre_img", thre);
 					waitKey();
