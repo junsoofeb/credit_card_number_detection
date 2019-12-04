@@ -3,9 +3,9 @@ with OpenCV
 
 ## 1. 개요
 
-1) 카메라로 카드번호를 추출하는 프로그램 (roi_save.cpp)
-2) 추출한 카드번호를 선명하게 만들어주는 프로그램 (sharpening.cpp)  
-3) 카드 번호 추출 deep learning version (card_detection_with_EAST.cpp) 
+### 1) 카메라로 카드번호를 추출하는 프로그램 (roi_save.cpp)
+### 2) 추출한 카드번호를 선명하게 만들어주는 프로그램 (sharpening.cpp)  
+### 3) 카드 번호 추출 deep learning version (card_detection_with_EAST.cpp) 
 
 ## 2. 구현 환경
 
@@ -15,19 +15,19 @@ with OpenCV
 
 ## 3. 동작 과정
 
-ㄱ) roi_save.cpp
+### ㄱ) roi_save.cpp
 
 1) 이미지 resize(), bilateralFilter() , morphologyEx() 등을 통해 전처리
 2) 가로, 세로, 종횡비로 한번 거르고, 추출한 roi에서 넓이를 기준으로 후보를 선정 (3개까지)
 3) warpPerspective()적용하여, 위치 보정 후 출력
 
 
-ㄴ) sharpening.cpp
+### ㄴ) sharpening.cpp
 
 1) roi_save.cpp 와 동일한 과정을 거쳐 roi추출
 2) 추출한 roi에 addWeighted(), bilateralFilter() 등 선명도가 최선인 경우를 탐색
 
-ㄷ) card_detection_with_EAST.cpp
+### ㄷ) card_detection_with_EAST.cpp
 
 1) 카메라로 이미지 촬영 후 target 이미지로 선택
 2) target 이미지를 east알고리즘에 돌려 모든 text영역 추출
